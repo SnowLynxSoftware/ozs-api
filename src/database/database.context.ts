@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { singleton } from "tsyringe";
 import { AppDataSource } from "../providers/datasource.provider";
+import { LoggingService } from "../services/logging.service";
 
 @singleton()
 export class Database {
@@ -10,7 +11,7 @@ export class Database {
         return this._db.getRepository(entity);
     }
 
-    constructor() {
+    constructor(private readonly _log: LoggingService) {
         this._db = AppDataSource;
     }
 
@@ -18,12 +19,12 @@ export class Database {
         try {
             await this._db.initialize();
             if (this._db.isInitialized) {
-                console.log("Database is connected!");
+                this._log.Logger.info("Database is connected!");
             } else {
                 throw new Error("Database could not connect!");
             }
         } catch (error: any) {
-            console.error(error.message);
+            this._log.Logger.error(error.message);
             process.exit(1);
         }
     }

@@ -2,6 +2,8 @@ import { container } from "tsyringe";
 import { EnvService } from "./services/env.service";
 import { Database } from "./database/database.context";
 import { AppServer } from "./app-server";
+import { LoggingService } from "./services/logging.service";
+import { RedisService } from "./services/redis.service";
 
 /**
  * In startup, we will register a few providers and services that we need to load.
@@ -14,8 +16,14 @@ export const startup = async () => {
     // Load Env Service first--if this fails, we should quit the app early.
     container.resolve(EnvService);
 
+    // Init Logging Service
+    container.resolve(LoggingService);
+
     // Init DB Provider
     await container.resolve(Database).Initialize();
+
+    // Init Redis Service
+    await container.resolve(RedisService).Initialize();
 
     // At this point--we are ready to start spinning up the HTTP Server to bind everything together
     const appServer = container.resolve(AppServer);

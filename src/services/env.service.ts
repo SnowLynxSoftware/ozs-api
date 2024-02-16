@@ -1,12 +1,14 @@
 import { singleton } from "tsyringe";
 import { EnvProvider, IRawEnv } from "../providers/env.provider";
 import { NodeEnv } from "../models/enums/node-env.enum";
+import { LogLevel } from "../models/enums/log-level.enum";
 
 @singleton()
 export class EnvService {
     private readonly _rawEnv: IRawEnv;
     constructor() {
         this._rawEnv = EnvProvider.LoadRawEnv();
+        console.debug("Env Service Loaded Successfully!");
     }
 
     public get AppKey(): string {
@@ -21,8 +23,16 @@ export class EnvService {
         return this._rawEnv.NODE_ENV as NodeEnv;
     }
 
+    public get LogLevel(): LogLevel {
+        return this._rawEnv.LOG_LEVEL as LogLevel;
+    }
+
     public get DBConnectionString(): string {
         return this._rawEnv.DB_CONNECTION_STRING;
+    }
+
+    public get RedisURL(): string {
+        return this._rawEnv.REDIS_URL;
     }
 
     public get DBCert(): string {

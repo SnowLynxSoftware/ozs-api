@@ -2,7 +2,9 @@ export interface IRawEnv {
     APP_KEY: string;
     APP_BASE_API_URL: string;
     NODE_ENV: string;
+    LOG_LEVEL: string;
     DB_CONNECTION_STRING: string;
+    REDIS_URL: string;
     DB_CERT: string;
     JWT_SECRET: string;
     JWT_ACCESS_TOKEN_EXPIRY: string;
@@ -33,8 +35,18 @@ export class EnvProvider {
                 );
             }
 
+            if (!env.LOG_LEVEL) {
+                console.log(
+                    "LOG_LEVEL was not provided so we will default to: [warning]"
+                );
+            }
+
             if (!env.DB_CONNECTION_STRING) {
                 errorMessage += " DB_CONNECTION_STRING";
+            }
+
+            if (!env.REDIS_URL) {
+                errorMessage += " REDIS_URL";
             }
 
             if (!env.JWT_SECRET) {
@@ -71,9 +83,11 @@ export class EnvProvider {
                 APP_KEY: (env.APP_KEY as string).toString(),
                 APP_BASE_API_URL: (env.APP_BASE_API_URL as string).toString(),
                 NODE_ENV: env.NODE_ENV?.toString() || "development",
+                LOG_LEVEL: env.LOG_LEVEL?.toString() || "warning",
                 DB_CONNECTION_STRING: (
                     env.DB_CONNECTION_STRING as string
                 ).toString(),
+                REDIS_URL: (env.REDIS_URL as string).toString(),
                 DB_CERT: (env.DB_CERT as string)?.toString(),
                 JWT_SECRET: (env.JWT_SECRET as string).toString(),
                 JWT_ACCESS_TOKEN_EXPIRY: (
