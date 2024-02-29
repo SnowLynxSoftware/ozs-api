@@ -34,7 +34,7 @@ export class TokenService {
         });
     }
 
-    public async CreateVerificationToken(userId: number): Promise<string> {
+    public async CreateJWTVerificationToken(userId: number): Promise<string> {
         const signer = this._createSigner(
             this._envService.JWTVerificationTokenExpiry
         );
@@ -42,14 +42,14 @@ export class TokenService {
         return token.toString();
     }
 
-    public async CreateAccessToken(userId: number): Promise<string> {
+    public async CreateJWTAccessToken(userId: number): Promise<string> {
         const signer = this._createSigner(
             this._envService.JWTAccessTokenExpiry
         );
         const token = await signer({ id: userId });
         return token.toString();
     }
-    public async ValidateToken(token: string): Promise<number> {
+    public async ValidateJWTToken(token: string): Promise<number> {
         const verifier = this._createVerifier();
         const payload = await verifier(token);
         return payload.id;

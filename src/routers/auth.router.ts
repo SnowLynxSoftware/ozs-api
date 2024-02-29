@@ -1,7 +1,7 @@
 import { BaseRouter } from "./base.router";
 import { Request, Response, NextFunction } from "express";
-import { UserRegistrationService } from "../services/user-registration.service";
-import { AuthLoginService } from "../services/auth-login.service";
+import { UserRegistrationService } from "../services/auth/user-registration.service";
+import { AuthLoginService } from "../services/auth/auth-login.service";
 import { singleton } from "tsyringe";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { AuthError } from "../errors/auth.error";

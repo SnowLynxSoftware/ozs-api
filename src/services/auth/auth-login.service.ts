@@ -1,8 +1,8 @@
 import { singleton } from "tsyringe";
-import { UserRepository } from "../database/repositories/user.repository";
-import { TokenService } from "./token.service";
-import { StringUtil } from "../utils/string.util";
-import { CryptoService } from "./crypto.service";
+import { UserRepository } from "../../database/repositories/user.repository";
+import { TokenService } from "../token.service";
+import { StringUtil } from "../../utils/string.util";
+import { CryptoService } from "../crypto.service";
 
 @singleton()
 export class AuthLoginService {
@@ -28,6 +28,6 @@ export class AuthLoginService {
         if (!isValidPassword) {
             throw new Error("AUTH ERROR");
         }
-        return this._tokenService.CreateAccessToken(existingUser.id);
+        return this._tokenService.CreateJWTAccessToken(existingUser.id);
     }
 }

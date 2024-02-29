@@ -20,7 +20,7 @@ export class AuthMiddleware {
             const accessToken =
                 StringUtil.GetBearerTokenFromAuthHeader(authHeader);
             const _tokenService = container.resolve(TokenService);
-            const userID = await _tokenService.ValidateToken(accessToken);
+            const userID = await _tokenService.ValidateJWTToken(accessToken);
             const _userRepo = container.resolve(UserRepository);
             const user = await _userRepo.GetUserByID(userID);
             if (!user || !user.verified) {

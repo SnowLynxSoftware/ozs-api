@@ -1,10 +1,10 @@
 import { singleton } from "tsyringe";
-import { UserRepository } from "../database/repositories/user.repository";
-import { CryptoService } from "./crypto.service";
-import { TokenService } from "./token.service";
-import { EmailService } from "./email.service";
-import { userRegistrationTemplate } from "../email_templates/user-registration.template";
-import { EnvService } from "./env.service";
+import { UserRepository } from "../../database/repositories/user.repository";
+import { CryptoService } from "../crypto.service";
+import { TokenService } from "../token.service";
+import { EmailService } from "../email.service";
+import { userRegistrationTemplate } from "../../email_templates/user-registration.template";
+import { EnvService } from "../env.service";
 
 @singleton()
 export class UserRegistrationService {
@@ -33,7 +33,7 @@ export class UserRegistrationService {
                 return "An error occurred when attempting to create your user. Please try again or contact support if the problem persists!";
             } else {
                 const verificationToken =
-                    await this._tokenService.CreateVerificationToken(
+                    await this._tokenService.CreateJWTVerificationToken(
                         newUser.id
                     );
                 const emailResult =
@@ -59,7 +59,7 @@ export class UserRegistrationService {
 
     public async UserVerification(verificationToken: string): Promise<string> {
         const userID =
-            await this._tokenService.ValidateToken(verificationToken);
+            await this._tokenService.ValidateJWTToken(verificationToken);
         if (userID) {
             const existingUser = await this._userRepo.GetUserByID(userID);
             if (existingUser) {
