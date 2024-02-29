@@ -19,6 +19,10 @@ export class EnvService {
         return this._rawEnv.APP_BASE_API_URL;
     }
 
+    public get AppBaseFrontendURL(): string {
+        return this._rawEnv.APP_BASE_FRONTEND_URL;
+    }
+
     public get NodeEnv(): NodeEnv {
         return this._rawEnv.NODE_ENV as NodeEnv;
     }

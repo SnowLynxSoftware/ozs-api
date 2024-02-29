@@ -5,7 +5,14 @@
   "scripts": {
     "start": "npm run serve:local",
     "build": "npx tsc",
-    "serve:local": "NODE_ENV=development tsc-watch --onSuccess \"node -r dotenv/config ./dist/main.js\""
+    "serve:local": "NODE_ENV=development tsc-watch --onSuccess \"node -r dotenv/config ./dist/main.js\"",
+    "app-key:generate": "openssl rand -base64 16",
+    "typeorm": "NODE_ENV=migrations typeorm-ts-node-commonjs",
+    "schema:sync": "npm run typeorm schema:sync -- -d ./src/providers/datasource.provider.ts",
+    "migration:run": "NODE_ENV=migrations ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/providers/datasource.provider.ts",
+    "migration:show": "npm run typeorm migration:show -- -d ./src/providers/datasource.provider.ts",
+    "migration:generate": "npm run typeorm migration:generate -- -d ./src/providers/datasource.provider.ts",
+    "migration:create": "npm run typeorm migration:create"
   },
   "license": "gplv3",
   "prettier": {
@@ -31,6 +38,7 @@
     "@types/node": "^20.11.19",
     "dotenv": "^16.4.4",
     "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.3.3"
   }

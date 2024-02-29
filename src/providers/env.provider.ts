@@ -1,6 +1,7 @@
 export interface IRawEnv {
     APP_KEY: string;
     APP_BASE_API_URL: string;
+    APP_BASE_FRONTEND_URL: string;
     NODE_ENV: string;
     LOG_LEVEL: string;
     DB_CONNECTION_STRING: string;
@@ -27,6 +28,10 @@ export class EnvProvider {
 
             if (!env.APP_BASE_API_URL) {
                 errorMessage += " APP_BASE_API_URL";
+            }
+
+            if (!env.APP_BASE_FRONTEND_URL) {
+                errorMessage += " APP_BASE_FRONTEND_URL";
             }
 
             if (!env.NODE_ENV) {
@@ -82,6 +87,9 @@ export class EnvProvider {
             return {
                 APP_KEY: (env.APP_KEY as string).toString(),
                 APP_BASE_API_URL: (env.APP_BASE_API_URL as string).toString(),
+                APP_BASE_FRONTEND_URL: (
+                    env.APP_BASE_FRONTEND_URL as string
+                ).toString(),
                 NODE_ENV: env.NODE_ENV?.toString() || "development",
                 LOG_LEVEL: env.LOG_LEVEL?.toString() || "warning",
                 DB_CONNECTION_STRING: (
