@@ -23,4 +23,21 @@ export class RedisService {
             );
         }
     }
+
+    public async Get(key: string): Promise<string | null> {
+        const value = await this._client?.get(key);
+        return value || null;
+    }
+
+    public async Set(
+        key: string,
+        data: string,
+        expirationInSeconds?: number
+    ): Promise<void> {
+        if (expirationInSeconds) {
+            await this._client?.set(key, data, "EX", expirationInSeconds);
+        } else {
+            await this._client?.set(key, data);
+        }
+    }
 }
