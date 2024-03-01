@@ -10,6 +10,8 @@ export interface IRawEnv {
     JWT_SECRET: string;
     JWT_ACCESS_TOKEN_EXPIRY: string;
     JWT_VERIFICATION_TOKEN_EXPIRY: string;
+    AUTH_LOGIN_MAX_ATTEMPTS: string;
+    AUTH_LOGIN_LOCKOUT_IN_SECONDS: string;
     CRYPTO_KEY_LENGTH: string;
     CRYPTO_SALT_SIZE: string;
     EMAIL_PROVIDER_API_KEY: string;
@@ -66,6 +68,14 @@ export class EnvProvider {
                 errorMessage += " JWT_VERIFICATION_TOKEN_EXPIRY";
             }
 
+            if (!env.AUTH_LOGIN_MAX_ATTEMPTS) {
+                errorMessage += " AUTH_LOGIN_MAX_ATTEMPTS";
+            }
+
+            if (!env.AUTH_LOGIN_LOCKOUT_IN_SECONDS) {
+                errorMessage += " AUTH_LOGIN_LOCKOUT_IN_SECONDS";
+            }
+
             if (!env.CRYPTO_KEY_LENGTH) {
                 errorMessage += " CRYPTO_KEY_LENGTH";
             }
@@ -103,6 +113,12 @@ export class EnvProvider {
                 ).toString(),
                 JWT_VERIFICATION_TOKEN_EXPIRY: (
                     env.JWT_VERIFICATION_TOKEN_EXPIRY as string
+                ).toString(),
+                AUTH_LOGIN_MAX_ATTEMPTS: (
+                    env.AUTH_LOGIN_MAX_ATTEMPTS as string
+                ).toString(),
+                AUTH_LOGIN_LOCKOUT_IN_SECONDS: (
+                    env.AUTH_LOGIN_LOCKOUT_IN_SECONDS as string
                 ).toString(),
                 CRYPTO_KEY_LENGTH: (env.CRYPTO_KEY_LENGTH as string).toString(),
                 CRYPTO_SALT_SIZE: (env.CRYPTO_SALT_SIZE as string).toString(),

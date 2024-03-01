@@ -23,4 +23,14 @@ export class UserEntity extends AppBaseEntity {
         nullable: true,
     })
     last_login!: Date;
+
+    @Column({
+        default: 0,
+    })
+    fail_attempts!: number;
+
+    @Column({
+        default: null,
+    })
+    auth_lockout_until!: Date;
 }

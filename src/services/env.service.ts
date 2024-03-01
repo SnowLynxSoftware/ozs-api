@@ -55,6 +55,14 @@ export class EnvService {
         return this._rawEnv.JWT_VERIFICATION_TOKEN_EXPIRY;
     }
 
+    public get AuthLoginMaxAttempts(): number {
+        return parseInt(this._rawEnv.AUTH_LOGIN_MAX_ATTEMPTS);
+    }
+
+    public get AuthLoginLockoutInSeconds(): number {
+        return parseInt(this._rawEnv.AUTH_LOGIN_LOCKOUT_IN_SECONDS);
+    }
+
     public get CryptoKeyLength(): number {
         return parseInt(this._rawEnv.CRYPTO_KEY_LENGTH);
     }
