@@ -2,10 +2,14 @@ import { singleton } from "tsyringe";
 import sgMail from "@sendgrid/mail";
 import { EnvService } from "./env.service";
 import { NodeEnv } from "../models/enums/node-env.enum";
+import { AppSettingsService } from "./app-settings.service";
 
 @singleton()
 export class EmailService {
-    constructor(private readonly _envService: EnvService) {
+    constructor(
+        private readonly _envService: EnvService,
+        private readonly _appSettings: AppSettingsService
+    ) {
         sgMail.setApiKey(this._envService.EmailProviderAPIKey);
     }
 
@@ -13,7 +17,10 @@ export class EmailService {
         if (this._envService.NodeEnv === NodeEnv.TESTS) {
             return true;
         } else {
-            await sgMail.send(data);
+            const appSettings = await this._appSettings.GetAppSettings();
+            if (appSettings.enable_emails) {
+                await sgMail.send(data);
+            }
         }
         return true;
     }
