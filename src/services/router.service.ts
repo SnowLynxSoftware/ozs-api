@@ -7,6 +7,7 @@ import { EnvService } from "./env.service";
 import { NodeEnv } from "../models/enums/node-env.enum";
 import { LoggingService } from "./logging.service";
 import { AppSettingsMiddleware } from "../middleware/app-settings.middleware";
+import { AnimalRouter } from "../routers/animal.router";
 
 @singleton()
 export class RouterService {
@@ -16,9 +17,10 @@ export class RouterService {
         private readonly _envService: EnvService,
         private readonly _log: LoggingService,
         _healthRouter: HealthRouter,
-        _authRouter: AuthRouter
+        _authRouter: AuthRouter,
+        _animalRouter: AnimalRouter
     ) {
-        this._allRouters = [_healthRouter, _authRouter];
+        this._allRouters = [_healthRouter, _authRouter, _animalRouter];
     }
 
     public InitializeRouters() {
