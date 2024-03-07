@@ -74,4 +74,12 @@ export class EnvService {
     public get EmailProviderAPIKey(): string {
         return this._rawEnv.EMAIL_PROVIDER_API_KEY;
     }
+
+    public get TestDBConnectionString(): string {
+        return this._rawEnv.TEST_DB_CONNECTION_STRING;
+    }
+
+    public get TestDBTemplateName(): string {
+        return this._rawEnv.TEST_DB_TEMPLATE_NAME;
+    }
 }

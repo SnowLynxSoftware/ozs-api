@@ -15,6 +15,8 @@ export interface IRawEnv {
     CRYPTO_KEY_LENGTH: string;
     CRYPTO_SALT_SIZE: string;
     EMAIL_PROVIDER_API_KEY: string;
+    TEST_DB_CONNECTION_STRING: string;
+    TEST_DB_TEMPLATE_NAME: string;
 }
 
 export class EnvProvider {
@@ -125,6 +127,12 @@ export class EnvProvider {
                 EMAIL_PROVIDER_API_KEY: (
                     env.EMAIL_PROVIDER_API_KEY as string
                 ).toString(),
+                TEST_DB_CONNECTION_STRING: (
+                    env.TEST_DB_CONNECTION_STRING as string
+                ).toString() || "",
+                TEST_DB_TEMPLATE_NAME: (
+                    env.TEST_DB_TEMPLATE_NAME as string
+                ).toString() || "",
             };
         } catch (error: any) {
             console.error(error.message);
