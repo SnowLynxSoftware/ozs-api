@@ -10,9 +10,11 @@ import { RedisService } from "./services/redis.service";
  * These things will help up in the init phase when we start the server.
  *
  * Finally, we will actually start an instance of the application server here.
+ *
+ * If the dbNameOverride is supplied, it means we are running the integration tests.
  */
 
-export const startup = async () => {
+export const startup = async (dbNameOverride?: string) => {
     // Load Env Service first--if this fails, we should quit the app early.
     container.resolve(EnvService);
 
@@ -20,7 +22,7 @@ export const startup = async () => {
     container.resolve(LoggingService);
 
     // Init DB Provider
-    await container.resolve(Database).Initialize();
+    await container.resolve(Database).Initialize(dbNameOverride);
 
     // Init Redis Service
     await container.resolve(RedisService).Initialize();

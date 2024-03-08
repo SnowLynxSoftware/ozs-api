@@ -1,19 +1,30 @@
 import "reflect-metadata";
-// import { TestDBManager } from "./test-db.manager";
-// import { container } from "tsyringe";
+require("dotenv").config();
+import { TestDBManager } from "./test-db.manager";
+import { container } from "tsyringe";
 import { startup } from "../startup";
-import { TestRunnerManager } from "./test-runner.manager";
+import { Database } from "../database/database.context";
 
-const setup = async () => {
-    // const testDBManager = container.resolve(TestDBManager);
-    // const testDBName = await testDBManager.InitializeTestingDatabase();
+/**
+ * Before each test suite--we will rebuild the database instance for that suite.
+ * Then afterward, we will delete it.
+ */
+export const setup = async () => {
 
-    const httpServer = await startup();
+    const testDBManager = container.resolve(TestDBManager);
+    const testDBName = await testDBManager.InitializeTestingDatabase();
 
-    const runnerManager = new TestRunnerManager(httpServer);
-    await runnerManager.RunTests();
+    const httpServer = await startup(testDBName);
+
+    return {
+        httpServer,
+        testDBName
+    }
+
 };
 
-setup().catch((error) => {
-    console.error(error.message);
-});
+export const tearDown = async (testDBName: string) => {
+    const testDBManager = container.resolve(TestDBManager);
+    await container.resolve(Database).CloseConnection();
+    await testDBManager.RemoveTestDBInstance(testDBName);
+}

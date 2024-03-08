@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { singleton } from "tsyringe";
-import { AppDataSource } from "../providers/datasource.provider";
+import { AppDataSource, OverrideDataSourceForIntegrationTests } from "../providers/datasource.provider";
 import { LoggingService } from "../services/logging.service";
 
 @singleton()
@@ -15,8 +15,15 @@ export class Database {
         this._db = AppDataSource;
     }
 
-    public async Initialize() {
+    /**
+     * If the dbNameOverride is supplied, it means we are running the integrations tests.
+     */
+    public async Initialize(dbNameOverride?: string) {
         try {
+            if (dbNameOverride) {
+                this._log.Logger.info("[INTEGRATION TESTS] Overriding DB Connection...");
+                this._db = OverrideDataSourceForIntegrationTests(dbNameOverride);
+            }
             await this._db.initialize();
             if (this._db.isInitialized) {
                 this._log.Logger.info("Database is connected!");
@@ -27,5 +34,9 @@ export class Database {
             this._log.Logger.error(error.message);
             process.exit(1);
         }
+    }
+
+    public async CloseConnection() {
+        await this._db.destroy();
     }
 }

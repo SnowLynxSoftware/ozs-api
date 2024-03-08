@@ -1,41 +1,41 @@
+import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import request from "supertest";
 import * as http from "http";
-import assert from "node:assert";
+import { setup, tearDown } from "../setup";
 
-export class AuthRouterSpec {
+describe('Auth Router', () => {
 
-    public static async RunTests(httpServer: http.Server): Promise<string> {
+    let _app: http.Server;
+    let _testDBName: string;
 
-        console.log("[SPEC] Testing AuthRouter...");
-        const accessToken = await AuthRouterSpec._testUserLogin(httpServer);
-        await AuthRouterSpec._getUserTokenInfo(httpServer, accessToken);
+    beforeAll(() => {
+        return new Promise(async (resolve: any, _reject: any) => {
+            const _setupOptions = await setup();
+            _app = _setupOptions.httpServer;
+            _testDBName = _setupOptions.testDBName;
+            resolve();
+        });
+    });
 
-        return accessToken;
-    }
+    afterAll(() => {
+        _app.closeAllConnections();
+        _app.close();
+        return tearDown(_testDBName);
+    });
 
-    private static async _testUserLogin(httpServer: http.Server) {
-        let accessToken = "";
-        await request(httpServer)
+    test('User Login Test', async () => {
+        const response = await request(_app)
             .post('/auth/login')
-            .set('Authorization', 'Basic xxx')
-            .then(response => {
-                const data = response.body;
-                assert.notEqual(data.accessToken, "");
-                assert.notEqual(data.accessToken, undefined);
-                assert.notEqual(data.accessToken, null);
-                accessToken = data.accessToken;
-            });
-        return accessToken;
-    }
+            .set('Authorization', 'Basic xxx');
 
-    private static async _getUserTokenInfo(httpServer: http.Server, accessToken: string) {
-        await request(httpServer)
+        const accessToken = response.body.accessToken;
+
+        expect(accessToken).not.toBeNull();
+
+        const tokenResponse = await request(_app)
             .get('/auth/token')
             .set('Authorization', 'Bearer ' + accessToken)
-            .then(response => {
-                const data = response.body;
-                assert.equal(data.email, "xxx");
-            });
-    }
 
-}
+        expect(tokenResponse.body.id).not.toBeNull();
+    });
+});

@@ -23,3 +23,20 @@ export const AppDataSource = new DataSource({
     migrations: [__dirname + "/../database/migrations/*.{ts,js}"],
     entities: [__dirname + "/../database/entities/*.{ts,js}"],
 });
+
+export const OverrideDataSourceForIntegrationTests = (dbNameOverride: string) => {
+    return new DataSource({
+        url: envService.TestDBConnectionString + dbNameOverride,
+        // ...(envService.DBCert && {
+        //     ssl: {
+        //         ca: envService.DBCert,
+        //     },
+        // }),
+        type: "postgres",
+        connectTimeoutMS: 10000,
+        schema: "public",
+        applicationName: "ozs-api",
+        migrations: [__dirname + "/../database/migrations/*.{ts,js}"],
+        entities: [__dirname + "/../database/entities/*.{ts,js}"],
+    });
+}

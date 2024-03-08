@@ -9,20 +9,16 @@ export class TestDBManager {
 
     constructor(private _envService: EnvService) {
         this._pool = new Pool({
-            connectionString: this._envService.DBConnectionString
+            connectionString: this._envService.TestDBConnectionString + "postgres"
         });
     }
 
     public async InitializeTestingDatabase(): Promise<string> {
-        return this._copyTestingDatabase();
-    }
-
-    private async _copyTestingDatabase(): Promise<string> {
         const client = await this._pool.connect();
         let testDBName = "";
 
         try {
-            console.log("Creating Test DB...");
+            console.log("Creating Test DB Instance...");
             testDBName = this._envService.TestDBTemplateName + "_" + Date.now().toString();
             await client.query(`CREATE DATABASE ${testDBName} WITH TEMPLATE ${this._envService.TestDBTemplateName}`);
             console.log(`Successfully Created [ ${testDBName} ].`);
@@ -33,7 +29,20 @@ export class TestDBManager {
         }
 
         return testDBName;
-    };
+    }
+
+    public async RemoveTestDBInstance(dbName: string): Promise<void> {
+        const client = await this._pool.connect();
+
+        try {
+            console.log("Removing Test DB Instance...");
+            await client.query(`DROP DATABASE ${dbName}`);
+            console.log(`Successfully Removed [ ${dbName} ].`);
+        } catch (error: any) {
+            console.error(error.message);
+        } finally {
+            client.release();
+        }
+    }
 
 }
-

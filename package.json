@@ -13,7 +13,7 @@
     "migration:show": "npm run typeorm migration:show -- -d ./src/providers/datasource.provider.ts",
     "migration:generate": "npm run typeorm migration:generate -- -d ./src/providers/datasource.provider.ts",
     "migration:create": "npm run typeorm migration:create",
-    "test:integration": "npm run build && NODE_ENV=tests node -r dotenv/config ./dist/__tests__/setup.js"
+    "test": "rm -rf dist && NODE_ENV=tests jest --forceExit"
   },
   "license": "gplv3",
   "prettier": {
@@ -35,13 +35,16 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@types/cookie-parser": "^1.4.6",
     "@types/node": "^20.11.19",
     "@types/pg": "^8.11.2",
     "@types/supertest": "^6.0.2",
     "dotenv": "^16.4.4",
+    "jest": "^29.7.0",
     "prettier": "^3.2.5",
     "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.3.3"
