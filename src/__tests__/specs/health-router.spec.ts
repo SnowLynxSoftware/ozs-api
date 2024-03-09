@@ -18,9 +18,7 @@ describe('Health Router', () => {
     });
 
     afterAll(() => {
-        _app.closeAllConnections();
-        _app.close();
-        return tearDown(_testDBName);
+        return tearDown(_testDBName, _app);
     });
 
     test('Health Check Test', async () => {

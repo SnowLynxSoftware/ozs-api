@@ -1,6 +1,7 @@
 import express from "express";
 import { singleton } from "tsyringe";
 import { InitService } from "./services/init.service";
+import { NodeEnv } from "./models/enums/node-env.enum";
 
 @singleton()
 export class AppServer {
@@ -11,8 +12,9 @@ export class AppServer {
         this._initService.PreInit(this._app);
     }
 
-    public async Start() {
+    public async Start(nodeEnv: NodeEnv) {
         await this._initService.Init(this._app);
-        return this._app.listen(3000);
+        console.log(nodeEnv);
+        return this._app.listen(nodeEnv === NodeEnv.TESTS ? Math.floor(Math.random() * (4000 - 3000) + 3000) : 3000);
     }
 }

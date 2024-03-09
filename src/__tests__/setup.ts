@@ -4,6 +4,7 @@ import { TestDBManager } from "./test-db.manager";
 import { container } from "tsyringe";
 import { startup } from "../startup";
 import { Database } from "../database/database.context";
+import * as http from "http";
 
 /**
  * Before each test suite--we will rebuild the database instance for that suite.
@@ -23,8 +24,17 @@ export const setup = async () => {
 
 };
 
-export const tearDown = async (testDBName: string) => {
-    const testDBManager = container.resolve(TestDBManager);
-    await container.resolve(Database).CloseConnection();
-    await testDBManager.RemoveTestDBInstance(testDBName);
+export const tearDown = async (testDBName: string, _app: http.Server): Promise<boolean> => {
+    return new Promise(async (resolve, _reject) => {
+        const testDBManager = container.resolve(TestDBManager);
+        await container.resolve(Database).CloseConnection();
+        await testDBManager.RemoveTestDBInstance(testDBName);
+        _app.closeAllConnections();
+        _app.close(() => {
+            setImmediate(() => {
+                _app.emit('close');
+                resolve(true);
+            });
+        });
+    });
 }

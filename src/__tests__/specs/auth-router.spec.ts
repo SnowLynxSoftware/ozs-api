@@ -18,9 +18,7 @@ describe('Auth Router', () => {
     });
 
     afterAll(() => {
-        _app.closeAllConnections();
-        _app.close();
-        return tearDown(_testDBName);
+        return tearDown(_testDBName, _app);
     });
 
     test('User Login Test', async () => {

@@ -16,7 +16,7 @@ import { RedisService } from "./services/redis.service";
 
 export const startup = async (dbNameOverride?: string) => {
     // Load Env Service first--if this fails, we should quit the app early.
-    container.resolve(EnvService);
+    const envService = container.resolve(EnvService);
 
     // Init Logging Service
     container.resolve(LoggingService);
@@ -29,5 +29,5 @@ export const startup = async (dbNameOverride?: string) => {
 
     // At this point--we are ready to start spinning up the HTTP Server to bind everything together
     const appServer = container.resolve(AppServer);
-    return appServer.Start();
+    return appServer.Start(envService.NodeEnv);
 };

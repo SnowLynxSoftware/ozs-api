@@ -31,7 +31,7 @@ export class TestDBManager {
         return testDBName;
     }
 
-    public async RemoveTestDBInstance(dbName: string): Promise<void> {
+    public async RemoveTestDBInstance(dbName: string): Promise<boolean> {
         const client = await this._pool.connect();
 
         try {
@@ -43,6 +43,8 @@ export class TestDBManager {
         } finally {
             client.release();
         }
+
+        return true;
     }
 
 }
