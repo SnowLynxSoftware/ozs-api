@@ -1,0 +1,44 @@
+{
+  "name": "@snowlynxsoftware/ozs-api",
+  "version": "0.0.1-alpha",
+  "description": "The OpenZooSim Official API",
+  "scripts": {
+    "start": "npm run serve:local",
+    "production": "NODE_ENV=production node ./dist/main.js",
+    "build": "npx tsc",
+    "serve:local": "NODE_ENV=development tsc-watch --onSuccess \"node -r dotenv/config ./dist/main.js\"",
+    "app-key:generate": "openssl rand -base64 16",
+    "typeorm": "NODE_ENV=migrations typeorm-ts-node-commonjs",
+    "schema:sync": "npm run typeorm schema:sync -- -d ./src/providers/datasource.provider.ts",
+    "migration:run": "NODE_ENV=migrations ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/providers/datasource.provider.ts",
+    "migration:show": "npm run typeorm migration:show -- -d ./src/providers/datasource.provider.ts",
+    "migration:generate": "npm run typeorm migration:generate -- -d ./src/providers/datasource.provider.ts",
+    "migration:create": "npm run typeorm migration:create",
+    "test": "rm -rf dist && NODE_ENV=tests jest --forceExit"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "@fastify/cors": "^9.0.1",
+    "@fastify/helmet": "^11.1.1",
+    "@sendgrid/mail": "^8.1.3",
+    "fast-jwt": "^4.0.1",
+    "fastify": "^4.27.0",
+    "pg": "^8.11.5",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.8.0",
+    "typeorm": "^0.3.20",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "dotenv": "^16.4.5",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "tsc-watch": "^6.2.0",
+    "typescript": "^5.4.5"
+  }
+}
